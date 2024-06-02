@@ -1,4 +1,5 @@
 const express = require("express");
+const router = express.Router();
 const {
   createBooking,
   getBookingsForUser,
@@ -7,7 +8,6 @@ const {
   deleteBooking,
 } = require("../controllers/bookingController");
 const { auth } = require("../middleware");
-const router = express.Router();
 
 router.post("/:roomId/book", auth, createBooking);
 router.get("/", auth, getBookingsForUser);

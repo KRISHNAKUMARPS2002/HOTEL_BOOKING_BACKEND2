@@ -13,8 +13,9 @@ exports.createBooking = async (req, res) => {
     });
     await booking.save();
     res.status(201).json(booking);
-  } catch (error) {
-    res.status(500).send("Internal Server Error");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
 };
 
@@ -23,8 +24,49 @@ exports.getBookingsForUser = async (req, res) => {
 
   try {
     const bookings = await Booking.find({ userId });
-    res.json(bookings);
-  } catch (error) {
-    res.status(500).send("Internal Server Error");
+    res.status(200).json(bookings);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.getBookingById = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const booking = await Booking.findById(id);
+    if (!booking) return res.status(404).send("Booking not found");
+    res.status(200).json(booking);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.updateBooking = async (req, res) => {
+  const id = req.params.id;
+  const updates = req.body;
+
+  try {
+    const booking = await Booking.findByIdAndUpdate(id, updates, { new: true });
+    if (!booking) return res.status(404).send("Booking not found");
+    res.status(200).json(booking);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
+  }
+};
+
+exports.deleteBooking = async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    const booking = await Booking.findByIdAndRemove(id);
+    if (!booking) return res.status(404).send("Booking not found");
+    res.status(200).json({ message: "Booking deleted" });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
 };

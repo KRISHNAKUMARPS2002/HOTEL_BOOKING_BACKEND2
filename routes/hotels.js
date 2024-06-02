@@ -1,17 +1,17 @@
 const express = require("express");
+const router = express.Router();
 const {
   createHotel,
-  getAllHotels,
-  getHotelById,
+  getHotels,
+  getHotel,
   updateHotel,
   deleteHotel,
 } = require("../controllers/hotelController");
 const { auth, admin } = require("../middleware");
-const router = express.Router();
 
 router.post("/", [auth, admin], createHotel);
-router.get("/", getAllHotels);
-router.get("/:id", getHotelById);
+router.get("/", getHotels);
+router.get("/:id", getHotel);
 router.put("/:id", [auth, admin], updateHotel);
 router.delete("/:id", [auth, admin], deleteHotel);
 

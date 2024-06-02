@@ -17,8 +17,9 @@ exports.register = async (req, res) => {
     await user.save();
 
     res.status(201).send("User registered successfully.");
-  } catch (error) {
-    res.status(500).send("Internal Server Error");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
 };
 
@@ -34,11 +35,12 @@ exports.login = async (req, res) => {
       return res.status(400).send("Invalid username or password.");
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET);
-    user.tokens = user.tokens.concat({ token });
+    user.tokens.push({ token });
     await user.save();
 
     res.send({ token });
-  } catch (error) {
-    res.status(500).send("Internal Server Error");
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server error");
   }
 };
